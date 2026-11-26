@@ -21,24 +21,25 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
 import java.util.concurrent.atomic.AtomicBoolean;
 
 
 public class GameApp extends Application {
     private Label messageBar;
     private Scene scene;
-    private Rectangle rect;
+    private Rectangle dooRect;
     private Rectangle movingRect;
 
     public GameApp() {
 
     }
 
+
     @Override
     public void init() throws Exception {
         System.out.println("Initializing application");
     }
+
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -50,21 +51,17 @@ public class GameApp extends Application {
         iv.setSmooth(true);
         iv.setCache(true);
 
-        rect = new Rectangle();
-        rect.setX(635);
-        rect.setY(350);
-        rect.setWidth(50);
-        rect.setHeight(165);
-        rect.setStroke(Color.valueOf("#00ffff"));
-        rect.setFill(Color.grayRgb(1,0.5));
 
-        Group root = new Group();
-        scene = new Scene(root);
-        scene.setFill(Color.BLACK);
-        scene.setCursor(Cursor.OPEN_HAND);
-
-        rect.setOnMouseEntered(e -> {scene.setCursor(Cursor.HAND);});
-        rect.setOnMouseExited(e -> {scene.setCursor(Cursor.OPEN_HAND);});
+        // Create a door rectangle with a blue stroke and no fill
+        dooRect = new Rectangle();
+        dooRect.setX(635);
+        dooRect.setY(350);
+        dooRect.setWidth(50);
+        dooRect.setHeight(165);
+        dooRect.setStroke(Color.valueOf("#00ffff"));
+        dooRect.setFill(Color.grayRgb(1,0.5));
+        dooRect.setOnMouseEntered(e -> {scene.setCursor(Cursor.HAND);});
+        dooRect.setOnMouseExited(e -> {scene.setCursor(Cursor.OPEN_HAND);});
 
 
         // Create a rectangle that moves on the screen
@@ -76,10 +73,16 @@ public class GameApp extends Application {
         movingRect.setFill(Color.valueOf("#ffa500"));
 
 
+        Group root = new Group();
+        scene = new Scene(root);
+        scene.setFill(Color.BLACK);
+        scene.setCursor(Cursor.OPEN_HAND);
+
+
         StackPane hbox = new StackPane();
         hbox.getChildren().add(iv);
         root.getChildren().add(hbox);
-        root.getChildren().add(rect);
+        root.getChildren().add(dooRect);
         root.getChildren().add(movingRect);
 
 
@@ -109,7 +112,7 @@ public class GameApp extends Application {
             double x = e.getX();
             double y = e.getY();
 
-            if (rect.contains(x, y)) {
+            if (dooRect.contains(x, y)) {
                 messageBar.setText("This door is locked");
             } else {
                 messageBar.setText("Nothing interesting here");
