@@ -1,18 +1,32 @@
 package game;
 
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class GameApp extends Application {
+    private Label messageBar;
+    private Scene scene;
+    private Rectangle rect;
+
     public GameApp() {
 
     }
@@ -32,26 +46,54 @@ public class GameApp extends Application {
         iv.setSmooth(true);
         iv.setCache(true);
 
-        Rectangle rectangle = new Rectangle();
-        rectangle.setX(635);
-        rectangle.setY(350);
-        rectangle.setWidth(50);
-        rectangle.setHeight(165);
-        rectangle.setStroke(Color.valueOf("#00ffff"));
-        rectangle.setFill(Color.grayRgb(1,0.5));
+        rect = new Rectangle();
+        rect.setX(635);
+        rect.setY(350);
+        rect.setWidth(50);
+        rect.setHeight(165);
+        rect.setStroke(Color.valueOf("#00ffff"));
+        rect.setFill(Color.grayRgb(1,0.5));
 
         Group root = new Group();
-        Scene scene = new Scene(root);
+        scene = new Scene(root);
         scene.setFill(Color.BLACK);
         scene.setCursor(Cursor.OPEN_HAND);
 
-        rectangle.setOnMouseEntered(e -> {scene.setCursor(Cursor.HAND);});
-        rectangle.setOnMouseExited(e -> {scene.setCursor(Cursor.OPEN_HAND);});
+        rect.setOnMouseEntered(e -> {scene.setCursor(Cursor.HAND);});
+        rect.setOnMouseExited(e -> {scene.setCursor(Cursor.OPEN_HAND);});
 
-        HBox hbox = new HBox();
+        StackPane hbox = new StackPane();
         hbox.getChildren().add(iv);
         root.getChildren().add(hbox);
-        root.getChildren().add(rectangle);
+        root.getChildren().add(rect);
+
+        messageBar = new Label("Label 1");
+        messageBar.setText("Click anywhere");
+        messageBar.setStyle("-fx-font: serif; -fx-font-size: 20px; -fx-text-fill: white; -fx-background-color: black; -fx-background-insets: -5;");
+        StackPane.setAlignment(messageBar, Pos.BOTTOM_CENTER);
+        StackPane.setMargin(messageBar, new Insets(0,0,100,0));
+        hbox.getChildren().add(messageBar);
+
+        // resets the message bar back to default after 2 seconds
+        Timeline timeline = new Timeline();
+        timeline.setCycleCount(1);
+        timeline.setAutoReverse(true);
+        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(2000), event -> {messageBar.setText("Click anywhere");
+            System.out.println("Message bar text back to default");}));
+
+        scene.setOnMouseClicked(e -> {
+            // stop the message bar reset in case it's still executing
+            timeline.stop();
+            double x = e.getX();
+            double y = e.getY();
+            if (rect.contains(x, y)) {
+                messageBar.setText("This door is locked");
+            } else {
+                messageBar.setText("Nothing interesting here");
+            }
+            // Reset the message bar back to default after 2 seconds
+            timeline.play();
+        });
 
         stage.setTitle("School 21");
         stage.setWidth(1920);
