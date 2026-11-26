@@ -22,10 +22,12 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+
 public class GameApp extends Application {
     private Label messageBar;
     private Scene scene;
     private Rectangle rect;
+    private Rectangle movingRect;
 
     public GameApp() {
 
@@ -62,10 +64,22 @@ public class GameApp extends Application {
         rect.setOnMouseEntered(e -> {scene.setCursor(Cursor.HAND);});
         rect.setOnMouseExited(e -> {scene.setCursor(Cursor.OPEN_HAND);});
 
+
+        // Create a rectangle that moves on the screen
+        movingRect = new Rectangle();
+        movingRect.setX(940);
+        movingRect.setY(540);
+        movingRect.setWidth(80);
+        movingRect.setHeight(200);
+        movingRect.setFill(Color.valueOf("#ffa500"));
+
+
         StackPane hbox = new StackPane();
         hbox.getChildren().add(iv);
         root.getChildren().add(hbox);
         root.getChildren().add(rect);
+        root.getChildren().add(movingRect);
+
 
         messageBar = new Label("Label 1");
         messageBar.setText("Click anywhere");
@@ -74,12 +88,14 @@ public class GameApp extends Application {
         StackPane.setMargin(messageBar, new Insets(0,0,100,0));
         hbox.getChildren().add(messageBar);
 
+
         // resets the message bar back to default after 2 seconds
         Timeline timeline = new Timeline();
         timeline.setCycleCount(1);
         timeline.setAutoReverse(true);
         timeline.getKeyFrames().add(new KeyFrame(Duration.millis(2000), event -> {messageBar.setText("Click anywhere");
             System.out.println("Message bar text back to default");}));
+
 
         scene.setOnMouseClicked(e -> {
             // stop the message bar reset in case it's still executing
@@ -90,6 +106,12 @@ public class GameApp extends Application {
                 messageBar.setText("This door is locked");
             } else {
                 messageBar.setText("Nothing interesting here");
+            }
+
+            if (movingRect.contains(x, y)) {
+                movingRect.setFill(Color.valueOf("#48eb67"));
+            } else {
+                movingRect.setFill(Color.valueOf("#ffa500"));
             }
             // Reset the message bar back to default after 2 seconds
             timeline.play();
