@@ -73,6 +73,18 @@ public class GameApp extends Application {
         movingRect.setFill(Color.valueOf("#ffa500"));
 
 
+        // Create a shoe sack object
+        Image imgShoeSack =  new Image("file:assets/objects/school_shoes.png");
+        ImageView ivShoeSack = new ImageView();
+        ivShoeSack.setImage(imgShoeSack);
+        ivShoeSack.setX(1530);
+        ivShoeSack.setY(300);
+        ivShoeSack.setFitWidth(100);
+        ivShoeSack.setPreserveRatio(true);
+        ivShoeSack.setSmooth(true);
+        ivShoeSack.setCache(true);
+
+
         Group root = new Group();
         scene = new Scene(root);
         scene.setFill(Color.BLACK);
@@ -80,10 +92,13 @@ public class GameApp extends Application {
 
 
         StackPane hbox = new StackPane();
-        hbox.getChildren().add(iv);
+//        hbox.getChildren().add(iv);
+//        hbox.getChildren().add(ivShoeSack);
+        hbox.getChildren().addAll(iv);
         root.getChildren().add(hbox);
         root.getChildren().add(dooRect);
         root.getChildren().add(movingRect);
+        root.getChildren().add(ivShoeSack);
 
 
         messageBar = new Label("Label 1");
