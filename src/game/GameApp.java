@@ -83,7 +83,7 @@ public class GameApp extends Application {
 
         messageBar = new Label("Label 1");
         messageBar.setText("Click anywhere");
-        messageBar.setStyle("-fx-font: serif; -fx-font-size: 20px; -fx-text-fill: white; -fx-background-color: black; -fx-background-insets: -5;");
+        messageBar.setStyle("-fx-font: bolder 36px sans-serif; -fx-text-fill: #ffea00");
         StackPane.setAlignment(messageBar, Pos.BOTTOM_CENTER);
         StackPane.setMargin(messageBar, new Insets(0,0,100,0));
         hbox.getChildren().add(messageBar);
