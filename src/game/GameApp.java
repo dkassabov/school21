@@ -1,3 +1,7 @@
+/*
+    Author:     Denis Kassabov
+ */
+
 package game;
 
 import javafx.animation.KeyFrame;
