@@ -88,14 +88,14 @@ public class SceneView extends StackPane implements WindowParams {
     private void defineHotspots() {
         // example: a door on the right
         hotspots.add(new ClickableArea(
-                820, 200, 100, 180, "door", () -> {
+                600, 350, 100, 180, "door", () -> {
             setMessage("The door is locked.");
         }));
 
         // example: table in the middle
         hotspots.add(new ClickableArea(
-                380, 300, 180, 100, "table", () -> {
-            setMessage("You found a note on the table.");
+                1500, 500, 180, 100, "table", () -> {
+            setMessage("You found a bag hanging on the tree.");
         }));
     }
 
