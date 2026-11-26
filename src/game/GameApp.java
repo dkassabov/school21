@@ -2,12 +2,14 @@ package game;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 public class GameApp extends Application {
@@ -30,12 +32,26 @@ public class GameApp extends Application {
         iv.setSmooth(true);
         iv.setCache(true);
 
+        Rectangle rectangle = new Rectangle();
+        rectangle.setX(635);
+        rectangle.setY(350);
+        rectangle.setWidth(50);
+        rectangle.setHeight(165);
+        rectangle.setStroke(Color.valueOf("#00ffff"));
+        rectangle.setFill(Color.grayRgb(1,0.5));
+
         Group root = new Group();
         Scene scene = new Scene(root);
         scene.setFill(Color.BLACK);
+        scene.setCursor(Cursor.OPEN_HAND);
+
+        rectangle.setOnMouseEntered(e -> {scene.setCursor(Cursor.HAND);});
+        rectangle.setOnMouseExited(e -> {scene.setCursor(Cursor.OPEN_HAND);});
+
         HBox hbox = new HBox();
         hbox.getChildren().add(iv);
         root.getChildren().add(hbox);
+        root.getChildren().add(rectangle);
 
         stage.setTitle("School 21");
         stage.setWidth(1920);
