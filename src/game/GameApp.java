@@ -1,11 +1,8 @@
 package game;
 
-import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -14,13 +11,14 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 
 public class GameApp extends Application {
@@ -93,29 +91,50 @@ public class GameApp extends Application {
         Timeline timeline = new Timeline();
         timeline.setCycleCount(1);
         timeline.setAutoReverse(true);
-        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(2000), event -> {messageBar.setText("Click anywhere");
+        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(2000),
+                event -> {messageBar.setText("Click anywhere");
             System.out.println("Message bar text back to default");}));
 
+
+        AtomicBoolean objSelected = new AtomicBoolean(false);
 
         scene.setOnMouseClicked(e -> {
             // stop the message bar reset in case it's still executing
             timeline.stop();
+
             double x = e.getX();
             double y = e.getY();
+
             if (rect.contains(x, y)) {
                 messageBar.setText("This door is locked");
             } else {
                 messageBar.setText("Nothing interesting here");
             }
 
-            if (movingRect.contains(x, y)) {
-                movingRect.setFill(Color.valueOf("#48eb67"));
-            } else {
-                movingRect.setFill(Color.valueOf("#ffa500"));
+            if (e.getButton() == MouseButton.PRIMARY) {
+                if (movingRect.contains(x, y)) {
+                    movingRect.setFill(Color.valueOf("#48eb67"));
+                    objSelected.set(true);
+                    messageBar.setText("Character selected");
+                    System.out.println("objSelected = " +  objSelected);
+                } else {
+                    movingRect.setFill(Color.valueOf("#ffa500"));
+                    objSelected.set(false);
+                    System.out.println("objSelected = " + objSelected);
+                }
+            } else if (e.getButton() == MouseButton.SECONDARY) {
+                if (objSelected.get()) {
+                    System.out.println("RMB click");
+                    movingRect.setX(e.getX()-movingRect.getWidth()/2);
+                    movingRect.setY(e.getY()-movingRect.getHeight());
+                    messageBar.setText("Moving to " + movingRect.getX() + "," + movingRect.getY());
+                }
             }
+
             // Reset the message bar back to default after 2 seconds
             timeline.play();
         });
+
 
         stage.setTitle("School 21");
         stage.setWidth(1920);
