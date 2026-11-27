@@ -27,7 +27,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class GameApp extends Application {
     private Label messageBar;
     private Scene scene;
-    private Rectangle dooRect;
+    private Rectangle doorRect;
     private Rectangle movingRect;
 
     public GameApp() {
@@ -53,15 +53,15 @@ public class GameApp extends Application {
 
 
         // Create a door rectangle with a blue stroke and no fill
-        dooRect = new Rectangle();
-        dooRect.setX(635);
-        dooRect.setY(350);
-        dooRect.setWidth(50);
-        dooRect.setHeight(165);
-        dooRect.setStroke(Color.valueOf("#00ffff"));
-        dooRect.setFill(Color.grayRgb(1,0.5));
-        dooRect.setOnMouseEntered(e -> {scene.setCursor(Cursor.HAND);});
-        dooRect.setOnMouseExited(e -> {scene.setCursor(Cursor.OPEN_HAND);});
+        doorRect = new Rectangle();
+        doorRect.setX(635);
+        doorRect.setY(350);
+        doorRect.setWidth(50);
+        doorRect.setHeight(165);
+        doorRect.setStroke(Color.valueOf("#00ffff"));
+        doorRect.setFill(Color.grayRgb(1,0.5));
+        doorRect.setOnMouseEntered(e -> {scene.setCursor(Cursor.HAND);});
+        doorRect.setOnMouseExited(e -> {scene.setCursor(Cursor.OPEN_HAND);});
 
 
         // Create a rectangle that moves on the screen
@@ -96,7 +96,7 @@ public class GameApp extends Application {
 //        hbox.getChildren().add(ivShoeSack);
         hbox.getChildren().addAll(iv);
         root.getChildren().add(hbox);
-        root.getChildren().add(dooRect);
+        root.getChildren().add(doorRect);
         root.getChildren().add(movingRect);
         root.getChildren().add(ivShoeSack);
 
@@ -127,7 +127,7 @@ public class GameApp extends Application {
             double x = e.getX();
             double y = e.getY();
 
-            if (dooRect.contains(x, y)) {
+            if (doorRect.contains(x, y)) {
                 messageBar.setText("This door is locked");
             } else {
                 messageBar.setText("Nothing interesting here");
@@ -156,6 +156,25 @@ public class GameApp extends Application {
             // Reset the message bar back to default after 2 seconds
             timeline.play();
         });
+
+
+        // This code is broken :/
+
+//        scene.setOnMouseDragged(event -> {
+//            timeline.stop();
+//
+//            double x = event.getX();
+//            double y = event.getY();
+//
+//
+//            if (ivShoeSack.contains(x, y)) {
+//                System.out.println("ivShoeSack drag start");
+//                if (event.isDragDetect())
+//                ivShoeSack.setX(x);
+//                ivShoeSack.setY(y);
+//                messageBar.setText("Shoe sack drag start");
+//            }
+//        });
 
 
         stage.setTitle("School 21");
